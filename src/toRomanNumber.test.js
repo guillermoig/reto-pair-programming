@@ -11,6 +11,12 @@ const testCases = [
   { input: 8, expected: "VIII" },
   { input: 9, expected: "IX" },
   { input: 10, expected: "X" },
+  { input: 11, expected: "XI" },
+  { input: 14, expected: "XIV" },
+  { input: 15, expected: "XV" },
+  { input: 19, expected: "XIX" },
+  // { input: 20, expected: "XX" },
+  // { input: 24, expected: "XXIV" },
 ];
 
 testCases.forEach(({ input, expected }) => {
