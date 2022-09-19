@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Reto malandriner de pair programming sept-2022",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
