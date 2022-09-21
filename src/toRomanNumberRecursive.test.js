@@ -32,3 +32,11 @@ testCases.forEach(({ input, expected }) => {
     expect(toRomanNumber(input)).toBe(expected);
   });
 });
+
+test("should throw not is a number error", () => {
+  expect(() => toRomanNumber("1")).toThrow("not is a number");
+});
+
+test("should throw not is a valid number when is negative number", () => {
+  expect(() => toRomanNumber(-2)).toThrow("not is a valid number");
+})
