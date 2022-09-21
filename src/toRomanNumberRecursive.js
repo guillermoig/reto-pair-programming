@@ -9,22 +9,27 @@ const dic = {
 }
 
 const toRomanNumber = (number) => {
-  if (parseInt(number) === 0) return '';
-
-  let result = ''
-  for (const [key, value] of Object.entries(dic).reverse()) {
-    if (parseInt(number) === key - 1) {
-      number -= key - 1
-      result = "I" + value + toRomanNumber(number)
-      break;
-    }
-    else if (parseInt(number) >= key) {
-      number -= key
-      result = value + toRomanNumber(number)
-      break;
-    }
+  const sortedDic = Object.keys(dic).reverse()
+  const predecessor = number > 0 && sortedDic.find((key) => number === key - 1)
+  if (predecessor) {
+    return "I" + dic[predecessor] + toRomanNumber(number - predecessor + 1)
   }
-  return result
+  const equalGreater = sortedDic.find((key) => number >= key)
+  if (equalGreater) {
+    return dic[equalGreater] + toRomanNumber(number - equalGreater)
+  }
+  return '';
+
+  // for (const [key, value] of Object.entries(dic).reverse()) {
+  //   if (parseInt(number) === key - 1) {
+  //     number -= key - 1
+  //     return "I" + value + toRomanNumber(number)
+  //   }
+  //   else if (parseInt(number) >= key) {
+  //     number -= key
+  //     return value + toRomanNumber(number)
+  //   }
+  // }
 }
 
 export default toRomanNumber
