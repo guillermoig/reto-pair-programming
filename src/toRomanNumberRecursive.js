@@ -19,17 +19,6 @@ const toRomanNumber = (number) => {
     return dic[equalGreater] + toRomanNumber(number - equalGreater)
   }
   return '';
-
-  // for (const [key, value] of Object.entries(dic).reverse()) {
-  //   if (parseInt(number) === key - 1) {
-  //     number -= key - 1
-  //     return "I" + value + toRomanNumber(number)
-  //   }
-  //   else if (parseInt(number) >= key) {
-  //     number -= key
-  //     return value + toRomanNumber(number)
-  //   }
-  // }
 }
 
 export default toRomanNumber
