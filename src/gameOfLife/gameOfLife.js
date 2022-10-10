@@ -28,13 +28,16 @@ export default function gameOfLife( board ) {
         const neightbors = getNeighbors({x, y}, board);
         const sum = neightbors.reduce((a, b) => a + b, 0);
 
-        if (result[y][x] === 1 && (sum == 2 || sum == 3 )) {
+        if (board[y][x] === 1) {
+          if (sum == 2 || sum == 3 ) {
             result[y][x] = 1
+          }
+          else
+            result[y][x] = 0
         }
+        else if (board[y][x] == 0 && (sum === 3))
+          result[y][x] = 1
 
-        else {
-          result[y][x] = 0
-        }
       }
     }
 
