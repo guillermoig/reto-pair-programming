@@ -19,7 +19,7 @@ const getNeighbors = ({ x, y }, board) => {
         bottomCenter,
         bottomRight
     ].filter(cell => cell !== undefined)
-} 
+}
 export default function gameOfLife( board ) {
     const result = clone(board);
 
@@ -28,12 +28,12 @@ export default function gameOfLife( board ) {
         const neightbors = getNeighbors({x, y}, board);
         const sum = neightbors.reduce((a, b) => a + b, 0);
 
-        if (result[y][x] === 1 & sum < 3 ) {
-            result[y][x] = 0
+        if (result[y][x] === 1 && (sum == 2 || sum == 3 )) {
+            result[y][x] = 1
         }
 
         else {
-          result[y][x] = board[y][x]
+          result[y][x] = 0
         }
       }
     }
