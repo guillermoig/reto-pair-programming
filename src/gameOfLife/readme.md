@@ -1,4 +1,4 @@
-#Game of Life Kata
+# Game of Life Kata
 
 Enlace: https://codingdojo.org/kata/GameOfLife/
 
