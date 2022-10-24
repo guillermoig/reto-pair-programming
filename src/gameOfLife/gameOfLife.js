@@ -4,13 +4,16 @@ export default function gameOfLife( initialState ) {
 }
 
 class Cell {
-  constructor({ state, neightbors }) {
+  constructor( state ) {
     this.state = state;
-    this.neightborsCount = neightbors.length;
   }
-
+  
   isAlive() {
-    return this.state === 1
+    return this.state === '*'
+  }
+  
+  setNeighbors(neightbors) {
+    this.neightborsCount = neightbors.length;
   }
 
   next() {
@@ -18,7 +21,7 @@ class Cell {
       || this.isAlive() && this.neightborsCount ===  2
       || !this.isAlive() && this.neightborsCount ===  3
 
-    this.state = shouldBeLife ? 1 : 0    
+    this.state = shouldBeLife ? '*' : '.'    
   }
 
   render() {
@@ -28,13 +31,19 @@ class Cell {
 
 
 class Board {
-  constructor(board) {
-    this.board = board.map((row, y) => {
+  constructor(initialBoard) {
+    this.board = initialBoard.map((row, y) => {
       return row.map((state, x) => {
-          const neightbors = getNeighborsLife({ x, y }, board);
-          return new Cell({ state, neightbors })
+        return new Cell( state )
       }) 
     })
+    for (let y = 0; y < this.board.length; y++){
+      for (let x = 0; x < this.board.length; x++){
+        const cell = this.board[y][x]
+        const neightbors = this.getNeighborsLife({ x, y });
+        cell.setNeighbors(neightbors)
+      }
+    }
   }
 
   next() {
@@ -51,27 +60,28 @@ class Board {
       }) 
     })
   }
+
+  getNeighborsLife ({ x, y }) {
+    const topLeft = this.board[y-1]?.[x-1]
+    const topCenter = this.board[y-1]?.[x]
+    const topRight = this.board[y-1]?.[x+1]
+    const centerLeft = this.board[y]?.[x-1]
+    const centerRight = this.board[y]?.[x+1]
+    const bottomLeft = this.board[y+1]?.[x-1]
+    const bottomCenter = this.board[y+1]?.[x]
+    const bottomRight = this.board[y+1]?.[x+1]
+  
+    return [
+        topLeft,
+        topCenter,
+        topRight,
+        centerLeft,
+        centerRight,
+        bottomLeft,
+        bottomCenter,
+        bottomRight
+    ].filter(cell => cell?.isAlive())
+  }
+
 }
 
-
-const getNeighborsLife = ({ x, y }, board) => {
-  const topLeft = board[y-1]?.[x-1]
-  const topCenter = board[y-1]?.[x]
-  const topRight = board[y-1]?.[x+1]
-  const centerLeft = board[y]?.[x-1]
-  const centerRight = board[y]?.[x+1]
-  const bottomLeft = board[y+1]?.[x-1]
-  const bottomCenter = board[y+1]?.[x]
-  const bottomRight = board[y+1]?.[x+1]
-
-  return [
-      topLeft,
-      topCenter,
-      topRight,
-      centerLeft,
-      centerRight,
-      bottomLeft,
-      bottomCenter,
-      bottomRight
-  ].filter(Boolean)
-}
