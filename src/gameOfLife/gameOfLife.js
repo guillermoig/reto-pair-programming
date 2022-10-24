@@ -32,7 +32,9 @@ class Cell {
 
 class Board {
   constructor(initialBoard) {
-    this.board = initialBoard.map((row, y) => {
+    const boarArray = initialBoard.split("\n").map(line => [...line])
+    
+    this.board = boarArray.map((row, y) => {
       return row.map((state, x) => {
         return new Cell( state )
       }) 
@@ -57,8 +59,8 @@ class Board {
     return this.board.map((row) => {
       return row.map((cell) => {
           return cell.render()
-      }) 
-    })
+      }).join("")
+    }).join("\n")
   }
 
   getNeighborsLife ({ x, y }) {
