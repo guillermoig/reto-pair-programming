@@ -1,45 +1,77 @@
-const clone = obj => JSON.parse(JSON.stringify(obj))
-const getNeighbors = ({ x, y }, board) => {
-    const topLeft = board[y-1]?.[x-1]
-    const topCenter = board[y-1]?.[x]
-    const topRight = board[y-1]?.[x+1]
-    const centerLeft = board[y]?.[x-1]
-    const centerRight = board[y]?.[x+1]
-    const bottomLeft = board[y+1]?.[x-1]
-    const bottomCenter = board[y+1]?.[x]
-    const bottomRight = board[y+1]?.[x+1]
-
-    return [
-        topLeft,
-        topCenter,
-        topRight,
-        centerLeft,
-        centerRight,
-        bottomLeft,
-        bottomCenter,
-        bottomRight
-    ].filter(cell => cell !== undefined)
+export default function gameOfLife( initialState ) {
+    const board = new Board(initialState);
+    return board.next()
 }
-export default function gameOfLife( board ) {
-    const result = clone(board);
 
-    for (let y = 0; y < board.length; y++){
-      for (let x = 0; x < board.length; x++){
-        const neightbors = getNeighbors({x, y}, board);
-        const sum = neightbors.reduce((a, b) => a + b, 0);
+class Cell {
+  constructor({ state, neightbors }) {
+    this.state = state;
+    this.neightborsCount = neightbors.length;
+  }
 
-        if (board[y][x] === 1) {
-          if (sum == 2 || sum == 3 ) {
-            result[y][x] = 1
-          }
-          else
-            result[y][x] = 0
-        }
-        else if (board[y][x] == 0 && (sum === 3))
-          result[y][x] = 1
+  isAlive() {
+    return this.state === 1
+  }
 
+  next() {
+    const shouldBeLife = this.isAlive() && this.neightborsCount ===  3 
+      || this.isAlive() && this.neightborsCount ===  2
+      || !this.isAlive() && this.neightborsCount ===  3
+
+    this.state = shouldBeLife ? 1 : 0    
+  }
+
+  render() {
+    return this.state
+  }
+}
+
+
+class Board {
+  constructor(board) {
+    this.board = board.map((row, y) => {
+      return row.map((state, x) => {
+          const neightbors = getNeighborsLife({ x, y }, board);
+          return new Cell({ state, neightbors })
+      }) 
+    })
+  }
+
+  next() {
+    for (let y = 0; y < this.board.length; y++){
+      for (let x = 0; x < this.board.length; x++){
+        const cell = this.board[y][x]
+        cell.next()
       }
     }
 
-    return result
+    return this.board.map((row) => {
+      return row.map((cell) => {
+          return cell.render()
+      }) 
+    })
+  }
+}
+
+
+const getNeighborsLife = ({ x, y }, board) => {
+  const topLeft = board[y-1]?.[x-1]
+  const topCenter = board[y-1]?.[x]
+  const topRight = board[y-1]?.[x+1]
+  const centerLeft = board[y]?.[x-1]
+  const centerRight = board[y]?.[x+1]
+  const bottomLeft = board[y+1]?.[x-1]
+  const bottomCenter = board[y+1]?.[x]
+  const bottomRight = board[y+1]?.[x+1]
+
+  return [
+      topLeft,
+      topCenter,
+      topRight,
+      centerLeft,
+      centerRight,
+      bottomLeft,
+      bottomCenter,
+      bottomRight
+  ].filter(Boolean)
 }
