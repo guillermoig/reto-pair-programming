@@ -1,6 +1,5 @@
 import gameOfLife from './gameOfLife';
 
-// const aBoard = array => -...aBoard.
 describe('gameOfLife', () => {
     test("All dead keep like that", () => {
         const initialBoard = [
