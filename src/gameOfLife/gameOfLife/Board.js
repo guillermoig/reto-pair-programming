@@ -12,7 +12,7 @@ class Board {
       for (let y = 0; y < this.board.length; y++){
         for (let x = 0; x < this.board.length; x++){
           const cell = this.board[y][x]
-          const neightbors = this.getNeighborsLife({ x, y });
+          const neightbors = this.#getNeighborsLife({ x, y });
           cell.setNeighbors(neightbors)
         }
       }
@@ -26,35 +26,33 @@ class Board {
         }
       }
   
-      return this.board.map((row) => {
-        return row.map((cell) => {
-            return cell.render()
-        }).join("")
-      }).join("\n")
+      return this.#render()
+    }
+
+    #render() {
+        return this.board.map((row) => 
+             row.map((cell) =>
+                 cell.render()
+            ).join("")
+        ).join("\n")
     }
   
-    getNeighborsLife ({ x, y }) {
-      const topLeft = this.board[y-1]?.[x-1]
-      const topCenter = this.board[y-1]?.[x]
-      const topRight = this.board[y-1]?.[x+1]
-      const centerLeft = this.board[y]?.[x-1]
-      const centerRight = this.board[y]?.[x+1]
-      const bottomLeft = this.board[y+1]?.[x-1]
-      const bottomCenter = this.board[y+1]?.[x]
-      const bottomRight = this.board[y+1]?.[x+1]
-    
-      return [
-          topLeft,
-          topCenter,
-          topRight,
-          centerLeft,
-          centerRight,
-          bottomLeft,
-          bottomCenter,
-          bottomRight
-      ].filter(cell => cell?.isAlive())
+    #getNeighborsLife ({ x, y }) {
+        const positions = [-1, 0, 1].map((xOffset) => {
+            return [-1, 0, 1].map((yOffset) => {
+                return { x: x + xOffset, y: y + yOffset }
+            })
+        })
+        .flat()
+        .filter((cell) => {
+            return !(x === cell.x && y === cell.y)
+        })
+
+
+    return positions
+        .map(({ x, y }) => this.board[y]?.[x])
+        .filter((cell) =>  cell?.isAlive())
     }
-  
   }
   
 export default Board  
