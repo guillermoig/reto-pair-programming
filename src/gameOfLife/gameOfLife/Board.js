@@ -1,8 +1,9 @@
 import Cell from "./Cell"
 
 class Board {
+    #board = []
     constructor(initialBoard) {
-        this.board = this.#buildBoard(initialBoard)
+        this.#board = this.#buildBoard(initialBoard)
         this.#populateNeighbors()
     }
 
@@ -12,18 +13,18 @@ class Board {
     }
 
     #callNextAllCells() {
-        for (let y = 0; y < this.board.length; y++){
-            for (let x = 0; x < this.board.length; x++){
-              const cell = this.board[y][x]
+        for (let y = 0; y < this.#board.length; y++){
+            for (let x = 0; x < this.#board.length; x++){
+              const cell = this.#board[y][x]
               cell.next()
             }
         }
     }
 
     #populateNeighbors() {
-        for (let y = 0; y < this.board.length; y++){
-            for (let x = 0; x < this.board.length; x++){
-              const cell = this.board[y][x]
+        for (let y = 0; y < this.#board.length; y++){
+            for (let x = 0; x < this.#board.length; x++){
+              const cell = this.#board[y][x]
               const neightbors = this.#getNeighborsLife({ x, y });
               cell.setNeighbors(neightbors)
             }
@@ -41,7 +42,7 @@ class Board {
     }
 
     #render() {
-        return this.board.map((row) => 
+        return this.#board.map((row) => 
              row.map((cell) =>
                  cell.render()
             ).join("")
@@ -60,7 +61,7 @@ class Board {
         .filter(cell => !isCurrentCell(cell))
 
         return positions
-            .map(({ x, y }) => this.board[y]?.[x])
+            .map(({ x, y }) => this.#board[y]?.[x])
             .filter((cell) =>  cell?.isAlive())
 
     }
