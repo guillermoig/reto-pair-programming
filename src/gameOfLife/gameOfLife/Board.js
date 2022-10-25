@@ -2,31 +2,42 @@ import Cell from "./Cell"
 
 class Board {
     constructor(initialBoard) {
-      const boarArray = initialBoard.split("\n").map(line => [...line])
-      
-      this.board = boarArray.map((row, y) => {
-        return row.map((state, x) => {
-          return new Cell( state )
-        }) 
-      })
-      for (let y = 0; y < this.board.length; y++){
-        for (let x = 0; x < this.board.length; x++){
-          const cell = this.board[y][x]
-          const neightbors = this.#getNeighborsLife({ x, y });
-          cell.setNeighbors(neightbors)
-        }
-      }
+        this.board = this.#buildBoard(initialBoard)
+        this.#populateNeighbors()
     }
-  
+
     next() {
-      for (let y = 0; y < this.board.length; y++){
-        for (let x = 0; x < this.board.length; x++){
-          const cell = this.board[y][x]
-          cell.next()
+        this.#callNextAllCells();
+        return this.#render()
+    }
+
+    #callNextAllCells() {
+        for (let y = 0; y < this.board.length; y++){
+            for (let x = 0; x < this.board.length; x++){
+              const cell = this.board[y][x]
+              cell.next()
+            }
         }
-      }
-  
-      return this.#render()
+    }
+
+    #populateNeighbors() {
+        for (let y = 0; y < this.board.length; y++){
+            for (let x = 0; x < this.board.length; x++){
+              const cell = this.board[y][x]
+              const neightbors = this.#getNeighborsLife({ x, y });
+              cell.setNeighbors(neightbors)
+            }
+        }
+    }
+
+    #buildBoard (initialBoard) {
+        const boarArray = initialBoard.split("\n").map(line => [...line])
+        
+        return boarArray.map((row, y) => {
+          return row.map((state, x) => {
+            return new Cell( state )
+          }) 
+        })
     }
 
     #render() {
@@ -53,6 +64,6 @@ class Board {
             .filter((cell) =>  cell?.isAlive())
 
     }
-  }
+}
   
 export default Board  
