@@ -38,20 +38,20 @@ class Board {
     }
   
     #getNeighborsLife ({ x, y }) {
+        const isCurrentCell = (cell) => cell.x === x && cell.y === y;
+
         const positions = [-1, 0, 1].map((xOffset) => {
             return [-1, 0, 1].map((yOffset) => {
                 return { x: x + xOffset, y: y + yOffset }
             })
         })
         .flat()
-        .filter((cell) => {
-            return !(x === cell.x && y === cell.y)
-        })
+        .filter(cell => !isCurrentCell(cell))
 
+        return positions
+            .map(({ x, y }) => this.board[y]?.[x])
+            .filter((cell) =>  cell?.isAlive())
 
-    return positions
-        .map(({ x, y }) => this.board[y]?.[x])
-        .filter((cell) =>  cell?.isAlive())
     }
   }
   
