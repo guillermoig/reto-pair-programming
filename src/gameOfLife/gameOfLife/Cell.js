@@ -17,15 +17,19 @@ class Cell {
     }
   
     next() {
-      const shouldBeLife = this.isAlive() && this.neightborsCount ===  3 
-        || this.isAlive() && this.neightborsCount ===  2
-        || !this.isAlive() && this.neightborsCount ===  3
-  
-      this.state = shouldBeLife ? STATE_SYMBOL.alive : STATE_SYMBOL.dead    
+      this.state = this.#shouldbeAlive() ? STATE_SYMBOL.alive : STATE_SYMBOL.dead    
     }
   
     render() {
       return this.state
+    }
+
+    #shouldbeAlive() {
+      if(this.isAlive()){
+        return this.neightborsCount === 2 || this.neightborsCount === 3
+      }
+      
+      return this.neightborsCount === 3
     }
 }
 
